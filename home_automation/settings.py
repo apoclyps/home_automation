@@ -25,7 +25,7 @@ SECRET_KEY = '1cwuq6uly$+)w4^o#7uce0!uj!yx3$%-1cz0@pyz70j6wx9kv!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "corsheaders",
     "rest_framework",
+    "home_automation",
 ]
 
 MIDDLEWARE = [
