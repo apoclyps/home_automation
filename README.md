@@ -22,7 +22,15 @@ python manage.py migrate
 ## Running the Service
 
 ```
-python manage.py runserver  0.0.0.0:8000
+python manage.py runserver 0.0.0.0:8000
+```
+
+The Docker-based workflow makes it possible to run the service against local or remote backing services by editing configuration values and typing `docker-compose up`.
+
+Alternatively, to run the service and it's linked services you will need to ensure the service ports are specified by using the following command:
+
+```sh
+docker-compose run --service-ports --name home_automation --rm service
 ```
 
 ### Maintainer

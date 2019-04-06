@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  service: &default
+    build: .
+    entrypoint: dockerize -wait tcp://postgres:5432
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DATABASE_URL=postgresql://postgres:@postgres/postgres
+      - DEBUG=true
+      - DJANGO_SETTINGS_MODULE=home_automation.settings
+      - LOG_LEVEL=debug
+      - SECRET_KEY
+    ports:
+      - "0.0.0.0:8000:8000"
+      - "0.0.0.0:8125:8125"
+    links:
+      - postgres
+    volumes:
+      - "./:/usr/src/app"
+
+  test:
+    build: .
+    entrypoint: dockerize -wait tcp://testpostgres:5432 -timeout 20s
+    command: ./scripts/test.sh
+    environment:
+      - DATABASE_URL=postgresql://postgres@testpostgres/postgres
+      - DJANGO_SETTINGS_MODULE=home_automation.settings
+      - SECRET_KEY=test_secret_key
+    links:
+      - testpostgres
+
+  task:
+    build: .
+    environment:
+      - DATABASE_URL
+      - DJANGO_SETTINGS_MODULE=home_automation.settings
+      - SECRET_KEY
+    volumes:
+      - "./:/usr/src/app"
+
+  postgres: &postgres
+    image: postgres:9.4-alpine
+
+  testpostgres:
+    <<: *postgres
+    ports:
+      - "0.0.0.0:5431:5432"
